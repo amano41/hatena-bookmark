@@ -17,29 +17,29 @@ function clear() {
 
 
 function doPost(e) {
-  
+
   var jsonString = e.postData.getDataAsString();
   var data = JSON.parse(jsonString)
-  
+
   var properties = PropertiesService.getScriptProperties().getProperties();
   var token = properties.VERIFICATION_TOKEN;
 
   if (data.token != token) {
     throw new Error("Invalid token: " + data.token);
   }
-  
+
   var page = data.page
   return hatena.addBookmark(page);
 }
 
 
 var hatena = {
-  
-  
+
+
   oauth: {
-    
+
     name: "hatena",
-    
+
     getService: function() {
 
       var properties = PropertiesService.getScriptProperties().getProperties();
@@ -56,7 +56,7 @@ var hatena = {
         .setCallbackFunction('callback')
         .setPropertyStore(PropertiesService.getUserProperties());
     },
-    
+
     authorize: function() {
       var service = this.getService();
       if (service.hasAccess()) {
@@ -66,7 +66,7 @@ var hatena = {
         Logger.log(service.authorize());
       }
     },
-    
+
     callback: function(request) {
       var service = this.getService();
       var isAuthorized = service.handleCallback(request);
@@ -75,8 +75,8 @@ var hatena = {
       } else {
         return HtmlService.createHtmlOutput("認証失敗");
       }
-   },
-    
+    },
+
     clear: function() {
       var service = this.getService();
       service.reset();
@@ -85,22 +85,22 @@ var hatena = {
 
 
   addBookmark: function(page) {
-    
+
     var url = "http://api.b.hatena.ne.jp/1/my/bookmark";
-    
+
     var options = {
       "method": "POST",
       "payload": {
         "url": page
       }
     };
-    
+
     Logger.log(page);
-    
+
     var service = this.oauth.getService();
     var response = service.fetch(url, options);
     Logger.log(response.getContentText())
-    
+
     return response;
   }
 
