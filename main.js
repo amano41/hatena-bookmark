@@ -86,7 +86,7 @@ var hatena = {
 
   addBookmark: function(page) {
 
-    var url = "http://api.b.hatena.ne.jp/1/my/bookmark";
+    var url = "https://bookmark.hatenaapis.com/rest/1/my/bookmark";
 
     var options = {
       "method": "POST",
